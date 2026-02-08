@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HORNO | Marcas & Alimentos Reales</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,400;12..96,700&family=Fraunces:ital,opsz,wght@1,9..144,100;1,9..144,300&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'horno-carbon': '#121212',
+                        'horno-fire': '#D34316',
+                        'horno-paper': '#F8F6F2',
+                        'horno-clay': '#E2DDD3'
+                    },
+                    fontFamily: {
+                        sans: ['Bricolage Grotesque', 'sans-serif'],
+                        serif: ['Fraunces', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8F6F2;
+            color: #121212;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            font-family: 'Bricolage Grotesque', sans-serif;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .marquee-content {
+            display: flex;
+            width: fit-content;
+            animation: marquee 30s linear infinite;
+        }
+
+        #organic-cursor {
+            width: 25px;
+            height: 25px;
+            background: rgba(211, 67, 22, 0.15);
+            border: 1px solid #D34316;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            transition: width 0.3s, height 0.3s, background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translate(-50%, -50%);
+        }
+
+        .link-hover #organic-cursor {
+            width: 50px;
+            height: 50px;
+            background: rgba(211, 67, 22, 0.25);
+        }
+
+        .bg-grain {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            opacity: 0.05;
+        }
+
+        .img-bw {
+            filter: grayscale(100%);
+            transition: filter 0.8s ease, transform 0.8s ease;
+        }
+        .img-bw:hover {
+            filter: grayscale(0%);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="selection:bg-horno-fire selection:text-white">
+
+    <div id="organic-cursor" class="hidden md:flex"></div>
+    <div class="fixed inset-0 bg-grain pointer-events-none z-0"></div>
+
+    <!-- Navegación -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-6 transition-all duration-500" id="main-nav">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center cursor-pointer group" onclick="window.scrollTo(0,0)">
+                <span class="font-bold tracking-[0.2em] text-2xl uppercase font-sans">Horno</span>
+            </div>
+            
+            <div class="hidden md:flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em]">
+                <a href="#que-es" class="hover:text-horno-fire transition-colors">¿Qué es?</a>
+                <a href="#metodo" class="hover:text-horno-fire transition-colors">Método</a>
+                <a href="#casos" class="hover:text-horno-fire transition-colors">Casos</a>
+                <a href="#nosotros" class="hover:text-horno-fire transition-colors">Nosotros</a>
+                <a href="#contacto" class="bg-horno-carbon text-white px-7 py-2.5 rounded-full hover:bg-horno-fire transition-all">Contacto</a>
+            </div>
+            
+            <button class="md:hidden"><i data-lucide="menu"></i></button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="min-h-screen flex flex-col justify-center px-6 lg:px-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full pt-20 z-10">
+            <div class="reveal mb-8">
+                <span class="text-xs font-bold tracking-[0.4em] text-horno-fire uppercase">Materia Prima & Storytelling</span>
+            </div>
+            
+            <h1 class="text-[clamp(3rem,9vw,10rem)] font-bold leading-[0.85] tracking-tight text-horno-carbon reveal" style="transition-delay: 100ms;">
+                Cocinamos <br>
+                <span class="font-serif italic font-light text-horno-fire">marcas reales.</span>
+            </h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mt-20 items-end">
+                <div class="md:col-span-7 reveal" style="transition-delay: 300ms;">
+                    <p class="text-2xl md:text-3xl font-light text-gray-500 leading-tight">
+                        Ideas que se amasan, se prueban, se ajustan, se hornean y salen al mundo listas para crecer. 
+                        <span class="text-horno-carbon font-normal">Para que volvamos a comer bien.</span>
+                    </p>
+                </div>
+                <div class="md:col-span-5 flex md:justify-end reveal" style="transition-delay: 400ms;">
+                    <div class="flex flex-col gap-2 items-start md:items-end">
+                        <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 italic">Scroll para entrar al horno</span>
+                        <div class="w-px h-16 bg-horno-fire/30"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Marquee de Marcas -->
+    <section class="py-16 border-y border-black/5 bg-white relative overflow-hidden z-10">
+        <div class="marquee-content flex items-center gap-24 md:gap-48 pr-24">
+            <span class="text-4xl font-bold tracking-tighter text-horno-carbon/20">SANTO PADRE</span>
+            <span class="text-4xl font-serif italic text-horno-carbon/20">REBELDE</span>
+            <span class="text-4xl font-bold tracking-tighter text-horno-carbon/20">BAMBOO</span>
+            <span class="text-4xl font-serif italic text-horno-carbon/20">CABRONAS</span>
+            <span class="text-4xl font-bold tracking-tighter text-horno-carbon/20">SANTO PADRE</span>
+            <span class="text-4xl font-serif italic text-horno-carbon/20">REBELDE</span>
+            <span class="text-4xl font-bold tracking-tighter text-horno-carbon/20">BAMBOO</span>
+            <span class="text-4xl font-serif italic text-horno-carbon/20">CABRONAS</span>
+        </div>
+    </section>
+
+    <!-- ¿Qué es HORNO? -->
+    <section id="que-es" class="py-40 px-6 lg:px-24 bg-horno-clay/20">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div class="reveal">
+                <h2 class="text-sm font-bold uppercase tracking-[0.4em] text-horno-fire mb-10 italic">01. Nuestra Naturaleza</h2>
+                <h3 class="text-5xl md:text-6xl font-bold tracking-tight mb-8 italic">No somos una agencia. <br><span class="font-serif italic font-light">Nacimos haciendo.</span></h3>
+                <p class="text-xl text-gray-600 leading-relaxed space-y-4">
+                    Somos un estudio. Somos una desarrolladora. Somos la cocina donde nacen productos de alimentos reales. No diseñamos un PowerPoint. Lo hacemos en un horno.
+                </p>
+                <div class="mt-12 p-8 bg-white rounded-3xl border border-black/5 shadow-sm italic text-gray-500">
+                    "El branding sin producto es ruido. Y el producto sin marca es silencio. Para eso existe HORNO."
+                </div>
+            </div>
+            <div class="reveal grid grid-cols-2 gap-4">
+                <div class="space-y-4 mt-12">
+                    <div class="aspect-square bg-white rounded-[3rem] overflow-hidden border border-black/5 p-8 flex items-center justify-center">
+                        <img src="images.png" class="w-full h-auto object-contain" alt="Bamboo Logo Oficial">
+                    </div>
+                    <div class="p-6 bg-horno-fire text-white rounded-[2rem]">
+                        <p class="text-xs font-bold uppercase tracking-widest">Enfoque</p>
+                        <p class="text-2xl font-serif italic">Real</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="p-6 bg-horno-carbon text-white rounded-[2rem]">
+                        <p class="text-xs font-bold uppercase tracking-widest">Output</p>
+                        <p class="text-2xl font-serif italic">Góndola</p>
+                    </div>
+                    <div class="aspect-[4/5] bg-horno-clay rounded-[3rem] overflow-hidden">
+                        <img src="image_979a72.png" class="w-full h-full object-cover grayscale img-bw" alt="Rebelde Producto en Mesa">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Casos de Éxito / Galería de Alimentos -->
+    <section id="casos" class="py-40 px-6 lg:px-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-20 reveal">
+                <h2 class="text-sm font-bold uppercase tracking-[0.4em] text-horno-fire mb-6">Nuestros Alimentos</h2>
+                <h3 class="text-5xl font-bold tracking-tighter">Proyectos con <br><span class="font-serif italic font-light">alma propia.</span></h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Rebelde -->
+                <div class="reveal group overflow-hidden rounded-[4rem] bg-white border border-black/5 flex flex-col shadow-sm hover:shadow-xl transition-all duration-500">
+                    <div class="aspect-[16/10] overflow-hidden bg-[#F3F3F3]">
+                        <img src="descarga (1).jfif" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000" alt="REBELDE Queso Crema Detalle">
+                    </div>
+                    <div class="p-10">
+                        <span class="text-xs font-bold uppercase tracking-widest text-horno-fire mb-4 block">REBELDE</span>
+                        <h4 class="text-2xl font-bold mb-4 italic">Un queso crema como los de antes.</h4>
+                        <p class="text-gray-500 font-light">Reescribiendo recetas y devolviendo la autenticidad a la categoría láctea.</p>
+                    </div>
+                </div>
+                <!-- Bamboo -->
+                <div class="reveal group overflow-hidden rounded-[4rem] bg-white border border-black/5 flex flex-col shadow-sm hover:shadow-xl transition-all duration-500" style="transition-delay: 200ms;">
+                    <div class="aspect-[16/10] overflow-hidden bg-[#F3F3F3] flex items-center justify-center p-12">
+                        <img src="image_979a1b.png" class="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-1000" alt="Bamboo Pochoclo Orgánico">
+                    </div>
+                    <div class="p-10">
+                        <span class="text-xs font-bold uppercase tracking-widest text-horno-fire mb-4 block">BAMBOO SNACKS</span>
+                        <h4 class="text-2xl font-bold mb-4 italic">Tres ingredientes (y nada más).</h4>
+                        <p class="text-gray-500 font-light">Pochoclo orgánico con sal marina, hoy presente en las mejores góndolas del país.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros / Perfiles Reales -->
+    <section id="nosotros" class="py-40 px-6 lg:px-24">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-24 reveal">
+                <h2 class="text-sm font-bold uppercase tracking-[0.4em] text-horno-fire mb-6 italic">03. Quiénes somos</h2>
+                <h3 class="text-5xl md:text-6xl font-bold tracking-tighter italic">La unión de la <br><span class="font-serif italic font-light">tierra y la estrategia.</span></h3>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 lg:gap-32">
+                <!-- Aldo -->
+                <div class="reveal">
+                    <div class="relative mb-12 group overflow-hidden rounded-[4rem] aspect-[4/5] bg-horno-clay shadow-2xl">
+                        <img src="1723066285925.jfif" class="w-full h-full object-cover grayscale img-bw" alt="Aldo Antonutti en el campo">
+                        <div class="absolute bottom-10 left-10 bg-horno-fire text-white px-10 py-4 rounded-full font-serif italic text-2xl shadow-xl z-20">Aldo Antonutti</div>
+                    </div>
+                    <div class="space-y-6 px-4">
+                        <p class="text-xs font-bold uppercase tracking-[0.3em] text-horno-fire">Artesano de alimentos reales / MBA del IAE</p>
+                        <h4 class="text-3xl font-bold tracking-tight italic">25 años en el mundo orgánico.</h4>
+                        <p class="text-gray-500 text-lg font-light leading-relaxed">
+                            Fundador de **Santo Padre** y creador de **Bamboo** y **REBELDE**. Aldo es quien baja la idea al piso, al proveedor, al número que cierra y al sabor que emociona. Es el puente entre el campo y la industria.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Bata -->
+                <div class="reveal lg:mt-32">
+                    <div class="relative mb-12 group overflow-hidden rounded-[4rem] aspect-[4/5] bg-horno-clay shadow-2xl">
+                        <img src="descarga.jfif" class="w-full h-full object-cover grayscale img-bw" alt="Bata Casaccia retrato">
+                        <div class="absolute bottom-10 left-10 bg-horno-carbon text-white px-10 py-4 rounded-full font-serif italic text-2xl shadow-xl z-20">Bata Casaccia</div>
+                    </div>
+                    <div class="space-y-6 px-4">
+                        <p class="text-xs font-bold uppercase tracking-[0.3em] text-horno-fire">Brand Builder / Máster en Marketing UdeSA</p>
+                        <h4 class="text-3xl font-bold tracking-tight italic">Cocinero de historias.</h4>
+                        <p class="text-gray-500 text-lg font-light leading-relaxed">
+                            Tras 15 años en consumo masivo liderando marcas como Patagonia o Franui, hoy le da forma estratégica a los proyectos en Horno. Bata es quien escribe las historias que hacen que la gente elija volver a comer bien.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contacto" class="py-40 bg-white px-6 lg:px-24 rounded-t-[5rem] border-t border-black/5 relative z-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-end">
+                <div class="reveal">
+                    <h2 class="text-6xl md:text-8xl font-bold tracking-tighter mb-12 leading-none">
+                        ¿Lo ponemos <br><span class="font-serif italic font-light text-horno-fire">al fuego?</span>
+                    </h2>
+                    <div class="space-y-4">
+                        <p class="text-gray-400 font-light text-xl">No damos recetas: nos sentamos a cocinar con vos.</p>
+                        <a href="mailto:hola@horno.com" class="text-2xl md:text-4xl font-bold border-b-4 border-horno-fire pb-2 hover:text-horno-fire transition-colors inline-block italic">
+                            hola@horno.com
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="reveal lg:text-right">
+                    <div class="grid grid-cols-2 gap-12 text-left lg:text-right">
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">MÉTODO</p>
+                            <p class="text-lg font-medium italic">Laboratorio Vivo</p>
+                            <p class="text-gray-400">Tandil, Buenos Aires</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-4">SEGUE EL AROMA</p>
+                            <a href="#" class="block text-lg font-medium hover:text-horno-fire transition-colors italic">Instagram</a>
+                            <a href="#" class="block text-lg font-medium hover:text-horno-fire transition-colors italic">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-40 pt-12 border-t border-black/5 flex flex-col md:flex-row justify-between items-center text-[10px] font-bold uppercase tracking-[0.4em] text-gray-300">
+                <p>© 2024 HORNO. TRANSFORMAMOS, NO MAQUILLAMOS.</p>
+                <div class="mt-4 md:mt-0 flex items-center gap-2">
+                    <span>Materia Prima & Storytelling</span>
+                    <div class="w-1 h-1 bg-horno-fire rounded-full"></div>
+                    <span>Tandil</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Cursor Orgánico
+        const cursor = document.getElementById('organic-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            let distX = mouseX - cursorX;
+            let distY = mouseY - cursorY;
+            cursorX = cursorX + (distX * 0.12);
+            cursorY = cursorY + (distY * 0.12);
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Reveal Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Hover Effect Global
+        document.querySelectorAll('a, button, .group').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('link-hover'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('link-hover'));
+        });
+
+        // Sticky Nav
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-sm');
+                nav.classList.remove('py-6');
+            } else {
+                nav.classList.remove('bg-white/80', 'backdrop-blur-xl', 'py-4', 'shadow-sm');
+                nav.classList.add('py-6');
+            }
+        });
+    </script>
+
+    <style>
+        @media (min-width: 1024px) {
+            body, a, button { cursor: none; }
+        }
+    </style>
+</body>
+</html>
