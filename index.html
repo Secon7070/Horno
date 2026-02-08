@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HORNO | Branding & Product Development</title>
+    <title>HORNO | Desarrolladora de Alimentos Reales</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -16,11 +16,16 @@
             --text-muted: #555555;
         }
 
+        * {
+            cursor: none !important; /* Escondemos el cursor nativo para el personalizado */
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-base);
             color: var(--text-main);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
         h1, h2, h3, .serif {
@@ -36,11 +41,35 @@
             text-transform: uppercase;
         }
 
-        /* Revelado cinemático */
+        /* Cursor Personalizado */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--brand-orange);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease-out, background 0.3s ease;
+            mix-blend-mode: difference;
+        }
+
+        #cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--text-main);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Animaciones de Revelado */
         .reveal {
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 1.4s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(40px);
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.active {
@@ -48,10 +77,18 @@
             transform: translateY(0);
         }
 
+        .reveal-mask {
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
+            transition: clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-mask.active {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
         .stagger-1 { transition-delay: 0.1s; }
         .stagger-2 { transition-delay: 0.2s; }
 
-        /* Botón de alto impacto */
         .btn-horno {
             position: relative;
             padding: 1.25rem 2.5rem;
@@ -61,17 +98,26 @@
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             border: 1px solid var(--text-main);
+            display: inline-block;
+            overflow: hidden;
         }
 
-        .btn-horno:hover {
-            background: transparent;
-            color: var(--text-main);
-            border-color: var(--text-main);
+        .btn-horno::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: var(--brand-orange);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: -1;
         }
 
-        /* Noise Texture Overlay */
+        .btn-horno:hover::before {
+            transform: translateX(100%);
+        }
+
         .noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -81,22 +127,6 @@
             z-index: 100;
         }
 
-        /* Parallax sutil */
-        .parallax-wrap {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .parallax-img {
-            transition: transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
-            scale: 1.1;
-        }
-
-        .reveal.active .parallax-img {
-            transform: scale(1);
-        }
-
-        /* Marquee continuo */
         @keyframes marquee {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -108,14 +138,14 @@
             width: max-content;
         }
 
-        /* Lineas de división minimalistas */
         .separator {
             height: 1px;
             background: rgba(0,0,0,0.08);
-            width: 100%;
+            width: 0;
+            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
+        .reveal.active .separator { width: 100%; }
 
-        /* Estilo de imagen de equipo personalizado */
         .team-img-container {
             aspect-ratio: 3/4;
             overflow: hidden;
@@ -125,66 +155,82 @@
 
         .team-img-container img {
             width: 100%;
-            height: 100%;
+            height: 110%; /* Extra height for parallax */
             object-fit: cover;
             filter: grayscale(100%);
-            transition: filter 0.8s cubic-bezier(0.19, 1, 0.22, 1), transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: filter 0.8s ease;
+            transform: translateY(0);
         }
 
         .team-img-container:hover img {
             filter: grayscale(0%);
-            transform: scale(1.05);
         }
+
+        /* Hover links */
+        .hover-link {
+            position: relative;
+        }
+        .hover-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 0; height: 1px;
+            background: var(--brand-orange);
+            transition: width 0.3s ease;
+        }
+        .hover-link:hover::after { width: 100%; }
     </style>
 </head>
 <body>
+    <div id="custom-cursor"></div>
+    <div id="cursor-follower"></div>
     <div class="noise"></div>
 
-    <!-- Navegación Refinada -->
+    <!-- Navegación -->
     <nav class="fixed w-full z-50 px-8 md:px-16 py-10 flex justify-between items-center transition-all duration-700" id="main-nav">
         <div class="logo-type">HORNO<span class="text-orange-600">.</span></div>
         <div class="hidden md:flex gap-14 text-[9px] font-bold uppercase tracking-[0.3em] text-muted">
-            <a href="#que-es" class="hover:text-orange-600 transition">Concepto</a>
-            <a href="#hacemos" class="hover:text-orange-600 transition">Servicios</a>
-            <a href="#quienes" class="hover:text-orange-600 transition">Nosotros</a>
-            <a href="#contacto" class="hover:text-orange-600 transition">Contacto</a>
+            <a href="#que-es" class="hover-link">¿Qué es?</a>
+            <a href="#metodo" class="hover-link">Método</a>
+            <a href="#hacemos" class="hover-link">Servicios</a>
+            <a href="#quienes" class="hover-link">Nosotros</a>
+            <a href="#contacto" class="hover-link">Contacto</a>
         </div>
         <div class="w-8 h-px bg-current md:hidden"></div>
     </nav>
 
-    <!-- Hero: Impacto Tipográfico -->
+    <!-- Hero -->
     <section class="min-h-screen flex flex-col justify-center px-8 md:px-16 relative overflow-hidden">
-        <div class="reveal active">
-            <div class="flex items-center gap-4 mb-8">
+        <div class="relative z-10">
+            <div class="reveal active flex items-center gap-4 mb-8">
                 <div class="w-12 h-px bg-orange-600"></div>
-                <span class="text-[9px] font-bold tracking-[0.5em] uppercase text-orange-600">Desarrolladora de Alimentos</span>
+                <span class="text-[9px] font-bold tracking-[0.5em] uppercase text-orange-600">🔥 H O R N O</span>
             </div>
-            <h1 class="text-[14vw] md:text-[9vw] leading-[0.85] font-light mb-16">
-                Ideas que <br>
-                <span class="italic font-normal serif">se hornean.</span>
+            <h1 class="reveal-mask active text-[14vw] md:text-[9vw] leading-[0.85] font-light mb-16">
+                Cocinamos <br>
+                <span class="italic font-normal serif">marcas reales.</span>
             </h1>
             <div class="flex flex-col md:flex-row gap-16 items-start">
-                <p class="max-w-md text-xl text-muted font-light leading-relaxed">
-                    No diseñamos presentaciones. Construimos marcas reales, productos tangibles y negocios que escalan.
+                <p class="reveal active stagger-1 max-w-md text-xl text-muted font-light leading-relaxed">
+                    Cocinamos productos y marcas para que volvamos a comer bien. Ideas que se amasan, se hornean y salen listas para crecer.
                 </p>
-                <a href="#hacemos" class="btn-horno">Descubrir el método</a>
+                <div class="reveal active stagger-2">
+                    <a href="#que-es" class="btn-horno">Entrar al taller</a>
+                </div>
             </div>
         </div>
-        
-        <!-- Fondo Decorativo -->
-        <div class="absolute -right-20 top-1/2 -translate-y-1/2 text-[30vw] font-black text-black/[0.02] select-none pointer-events-none uppercase">
-            Real
+        <div class="parallax-bg absolute -right-20 top-1/2 -translate-y-1/2 text-[30vw] font-black text-black/[0.02] select-none pointer-events-none uppercase transition-transform duration-1000">
+            REAl
         </div>
     </section>
 
-    <!-- Marquee de Casos -->
+    <!-- Marquee -->
     <div class="py-16 border-y border-stone-200 bg-white overflow-hidden">
         <div class="marquee-animate gap-32 items-center">
             <span class="serif text-5xl font-light italic">Santo Padre</span>
             <span class="text-5xl font-black tracking-tighter uppercase">REBELDE</span>
             <span class="serif text-5xl font-light">Bamboo Snacks</span>
             <span class="text-5xl font-black tracking-tighter uppercase text-orange-600">Cabronas</span>
-            <!-- Duplicado -->
             <span class="serif text-5xl font-light italic">Santo Padre</span>
             <span class="text-5xl font-black tracking-tighter uppercase">REBELDE</span>
             <span class="serif text-5xl font-light">Bamboo Snacks</span>
@@ -192,100 +238,109 @@
         </div>
     </div>
 
-    <!-- El Horno Transforma (Dark Section) -->
-    <section id="que-es" class="py-40 px-8 md:px-16 bg-[#111111] text-stone-200 overflow-hidden">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-center">
+    <!-- ¿Qué es HORNO? -->
+    <section id="que-es" class="py-40 px-8 md:px-16 bg-[#111111] text-stone-200">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-start">
             <div class="reveal">
-                <h2 class="text-6xl md:text-8xl mb-12 font-light leading-none">
-                    Entra crudo.<br><span class="italic text-orange-600 serif">Sale listo.</span>
-                </h2>
-                <div class="space-y-8 text-lg font-light text-stone-400 max-w-lg">
-                    <p>
-                        El horno no maquilla, transforma. En HORNO cocinamos lento, con intención, asegurando que cada producto tenga alma y cada marca tenga propósito.
-                    </p>
-                    <p class="text-white italic text-2xl serif py-6 border-y border-stone-800">
-                        "El branding sin producto es ruido. El producto sin marca es silencio."
-                    </p>
+                <h2 class="reveal-mask text-6xl md:text-8xl mb-12 font-light leading-none italic serif text-orange-600">¿Qué es HORNO?</h2>
+                <div class="space-y-8 text-xl font-light text-stone-400">
+                    <p class="text-white text-3xl leading-tight">No somos una agencia. Tampoco una consultora. Nacimos haciendo.</p>
+                    <p>Somos la cocina donde nacen productos y marcas reales: ideas que se amasan, se prueban, se ajustan, se hornean y salen al mundo listas para crecer.</p>
                 </div>
             </div>
-            <div class="reveal stagger-1">
-                <div class="parallax-wrap rounded-sm aspect-[4/5]">
-                    <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=1200" 
-                         alt="Proceso artesanal" class="parallax-img w-full h-full object-cover grayscale opacity-80">
+            <div class="reveal stagger-1 bg-stone-900 p-12 border border-stone-800 transform hover:scale-[1.02] transition-transform duration-500">
+                <h3 class="text-3xl mb-8 font-light italic serif text-white">Nuestro Manifiesto</h3>
+                <ul class="space-y-6 text-stone-400 italic text-lg leading-relaxed">
+                    <li class="hover:text-white transition-colors">"No diseñamos un PowerPoint. Lo hacemos en un horno."</li>
+                    <li class="hover:text-white transition-colors">"El branding sin producto es ruido."</li>
+                    <li class="hover:text-white transition-colors">"El producto sin marca es silencio."</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metodología -->
+    <section id="metodo" class="py-40 px-8 md:px-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal mb-24">
+                <h2 class="text-xs font-bold tracking-[0.6em] uppercase text-orange-600 mb-6">Cómo lo hacemos</h2>
+                <h3 class="reveal-mask text-6xl font-light italic serif">Nuestro método.</h3>
+            </div>
+            <div class="grid md:grid-cols-3 gap-16">
+                <div class="reveal border-l border-stone-200 pl-8 py-4">
+                    <p class="text-2xl font-light">Venimos de hacer: cada proyecto propio es un laboratorio vivo.</p>
+                </div>
+                <div class="reveal stagger-1 border-l border-stone-200 pl-8 py-4">
+                    <p class="text-2xl font-light">Pensamos como creativos y ejecutamos como operadores.</p>
+                </div>
+                <div class="reveal stagger-2 border-l border-stone-200 pl-8 py-4">
+                    <p class="text-2xl font-light">Partimos de ingredientes, no de briefs. Pensamos en negocios.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Capacidades (Minimal Grid) -->
-    <section id="hacemos" class="py-40 px-8 md:px-16">
-        <div class="reveal mb-24">
-            <h2 class="text-xs font-bold tracking-[0.6em] uppercase text-orange-600 mb-6">Expertise</h2>
-            <h3 class="text-6xl font-light italic serif">Nuestras Herramientas.</h3>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-x-32 gap-y-24">
-            <div class="reveal">
-                <div class="separator mb-10"></div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">01 / Producto</h4>
-                <h5 class="text-3xl font-bold mb-6">Ingeniería de Alimentos</h5>
-                <p class="text-muted font-light leading-relaxed">Formulación real con proveedores nacionales. Prototipado rápido y escalabilidad industrial sin perder la esencia artesanal.</p>
-            </div>
-            <div class="reveal">
-                <div class="separator mb-10"></div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">02 / Marca</h4>
-                <h5 class="text-3xl font-bold mb-6">Identidad & Narrativa</h5>
-                <p class="text-muted font-light leading-relaxed">Creamos nombres que se quedan y packagings que saltan de la góndola. Historias que se pueden saborear.</p>
-            </div>
-            <div class="reveal">
-                <div class="separator mb-10"></div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">03 / Negocio</h4>
-                <h5 class="text-3xl font-bold mb-6">Estrategia Comercial</h5>
-                <p class="text-muted font-light leading-relaxed">No entregamos un diseño, entregamos un negocio listo para operar. De la idea a la facturación real.</p>
-            </div>
-            <div class="reveal">
-                <div class="separator mb-10"></div>
-                <h4 class="text-xs font-bold uppercase tracking-widest mb-6">04 / Producción</h4>
-                <h5 class="text-3xl font-bold mb-6">Despliegue Técnico</h5>
-                <p class="text-muted font-light leading-relaxed">Desarrollo de plantas, optimización de costos y cadena de suministro. Hacemos que las cosas sucedan.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Equipo: Dualidad (Fotos Actualizadas) -->
-    <section id="quienes" class="py-40 bg-stone-100 px-8 md:px-16">
-        <div class="grid md:grid-cols-12 gap-16 items-start">
-            <div class="md:col-span-4 reveal">
-                <h2 class="text-5xl font-light serif italic leading-tight mb-8">Dos mundos,<br>un mismo fuego.</h2>
-                <p class="text-muted font-light">Aldo pone la tierra y la materia prima. Bata pone la estrategia y la voz. Juntos instalaron este HORNO.</p>
-            </div>
-            <div class="md:col-span-8 grid sm:grid-cols-2 gap-12">
-                <!-- Bata Casaccia -->
+    <!-- Servicios -->
+    <section id="hacemos" class="py-40 px-8 md:px-16 bg-stone-100">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-24">
+                <div class="reveal">
+                    <div class="separator mb-10"></div>
+                    <h4 class="text-orange-600 text-xs font-bold uppercase tracking-widest mb-10">Creamos Productos</h4>
+                    <ul class="space-y-4 text-2xl font-light list-none">
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Desarrollo desde cero</li>
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Formulación real</li>
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Ajuste de costos</li>
+                    </ul>
+                </div>
                 <div class="reveal stagger-1">
-                    <div class="team-img-container mb-8">
-                        <img src="1723066285925.jfif" alt="Bata Casaccia">
-                    </div>
-                    <h4 class="text-xl font-bold uppercase tracking-tighter">Bata Casaccia</h4>
-                    <p class="text-orange-600 text-[10px] font-bold tracking-widest uppercase mb-4">Estrategia & Storytelling</p>
-                    <p class="text-sm text-muted font-light">Brand Builder de consumo masivo (Franui, Oreo, Patagonia). Bata es el arquitecto de las historias que las marcas cuentan al mundo.</p>
-                </div>
-                <!-- Aldo Antonutti -->
-                <div class="reveal stagger-2">
-                    <div class="team-img-container mb-8">
-                        <img src="descarga.jfif" alt="Aldo Antonutti">
-                    </div>
-                    <h4 class="text-xl font-bold uppercase tracking-tighter">Aldo Antonutti</h4>
-                    <p class="text-orange-600 text-[10px] font-bold tracking-widest uppercase mb-4">Materia Prima & Desarrollo</p>
-                    <p class="text-sm text-muted font-light">25 años de legado orgánico. Fundador de Santo Padre y Bamboo. El artesano que hace que los números cierren y los productos sean reales.</p>
+                    <div class="separator mb-10"></div>
+                    <h4 class="text-orange-600 text-xs font-bold uppercase tracking-widest mb-10">Creamos Marcas</h4>
+                    <ul class="space-y-4 text-2xl font-light list-none">
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Naming y storytelling</li>
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Identidad y packaging</li>
+                        <li class="hover:translate-x-4 transition-transform duration-300">— Narrativa comercial</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer: Gran Final -->
+    <!-- Equipo -->
+    <section id="quienes" class="py-40 px-8 md:px-16">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal mb-24 text-center">
+                <h2 class="reveal-mask text-7xl font-light serif italic">¿Quiénes somos?</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-24">
+                <!-- Bata Casaccia (Imagen Intercambiada) -->
+                <div class="reveal">
+                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
+                        <img src="1723066285925.jfif" alt="Bata Casaccia" class="parallax-img">
+                    </div>
+                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Bata Casaccia</h4>
+                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Brand Builder</p>
+                    <p class="text-muted font-light leading-relaxed">Experto en storytelling y arquitectura de marcas con propósito. Bata le da forma estratégica a los proyectos y escribe las historias que las marcas cuentan.</p>
+                </div>
+
+                <!-- Aldo Antonutti (Imagen Intercambiada) -->
+                <div class="reveal stagger-1">
+                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
+                        <img src="descarga.jfif" alt="Aldo Antonutti" class="parallax-img">
+                    </div>
+                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Aldo Antonutti</h4>
+                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Artesano de Alimentos</p>
+                    <p class="text-muted font-light leading-relaxed">Lleva más de 25 años en el mundo orgánico. El artesano que baja la idea al piso, al lote piloto y al número que cierra.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     <footer id="contacto" class="py-40 px-8 md:px-16 text-center bg-white overflow-hidden relative">
         <div class="reveal max-w-5xl mx-auto relative z-10">
-            <h2 class="text-7xl md:text-[11vw] mb-16 leading-none font-bold tracking-tighter">
+            <h2 class="reveal-mask text-7xl md:text-[10vw] mb-16 leading-none font-bold tracking-tighter uppercase">
                 VOLVAMOS A <br><span class="italic serif font-light text-orange-600">COMER BIEN.</span>
             </h2>
             <div class="flex flex-col md:flex-row justify-center items-center gap-12 mb-32">
@@ -295,39 +350,73 @@
             </div>
             
             <div class="flex flex-col md:flex-row justify-between items-center gap-8 pt-16 border-t border-stone-100">
-                <div class="logo-type text-stone-900 tracking-[0.4em]">HORNO</div>
-                <div class="flex gap-12 text-[9px] font-bold uppercase tracking-widest">
-                    <a href="#" class="hover:text-orange-600 transition">Instagram</a>
-                    <a href="#" class="hover:text-orange-600 transition">LinkedIn</a>
-                </div>
+                <div class="logo-type text-stone-900">HORNO</div>
                 <div class="text-[9px] text-stone-400 font-bold tracking-widest uppercase italic">© 2026 / Tandil / AR</div>
             </div>
         </div>
-
-        <!-- Marca de agua gigante -->
-        <div class="absolute bottom-[-10%] left-1/2 -translate-x-1/2 text-[40vw] font-black text-stone-100/40 -z-0 select-none">
+        <div class="parallax-bg absolute bottom-[-10%] left-1/2 -translate-x-1/2 text-[40vw] font-black text-stone-100/40 -z-0 select-none uppercase transition-transform duration-700">
             HORNO
         </div>
     </footer>
 
     <script>
+        // Cursor Personalizado
+        const cursor = document.getElementById('custom-cursor');
+        const follower = document.getElementById('cursor-follower');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            // Suavizado del seguidor
+            setTimeout(() => {
+                follower.style.left = e.clientX - 10 + 'px';
+                follower.style.top = e.clientY - 10 + 'px';
+            }, 50);
+        });
+
+        // Hover en elementos interactivos para el cursor
+        document.querySelectorAll('a, button, .team-img-container').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(3)';
+                cursor.style.background = 'white';
+                follower.style.transform = 'scale(0)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.background = 'var(--brand-orange)';
+                follower.style.transform = 'scale(1)';
+            });
+        });
+
         // Animación de aparición al scroll
         const reveal = () => {
-            const reveals = document.querySelectorAll(".reveal");
+            const reveals = document.querySelectorAll(".reveal, .reveal-mask");
             reveals.forEach(el => {
                 const windowHeight = window.innerHeight;
                 const elementTop = el.getBoundingClientRect().top;
-                const elementVisible = 100;
-                if (elementTop < windowHeight - elementVisible) {
+                if (elementTop < windowHeight - 100) {
                     el.classList.add("active");
                 }
+            });
+
+            // Parallax Simple
+            const scrollPos = window.pageYOffset;
+            document.querySelectorAll('.parallax-img').forEach(img => {
+                const speed = 0.2;
+                img.style.transform = `translateY(${scrollPos * speed % 50}px)`;
+            });
+            
+            document.querySelectorAll('.parallax-bg').forEach(bg => {
+                const speed = 0.1;
+                bg.style.transform = `translate(-50%, ${scrollPos * speed}px)`;
             });
         };
 
         window.addEventListener("scroll", reveal);
         window.onload = reveal;
 
-        // Efecto Navbar
+        // Estilo Navbar
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
             if (window.scrollY > 100) {
