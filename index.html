@@ -16,8 +16,14 @@
             --text-muted: #555555;
         }
 
-        * {
-            cursor: none !important;
+        /* Ocultar cursor nativo solo en dispositivos con puntero (PC) */
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+            #custom-cursor, #cursor-follower { display: block; }
+        }
+
+        @media (pointer: coarse) {
+            #custom-cursor, #cursor-follower { display: none; }
         }
 
         body {
@@ -26,6 +32,7 @@
             color: var(--text-main);
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            width: 100%;
         }
 
         h1, h2, h3, .serif {
@@ -37,39 +44,39 @@
             font-family: 'Inter', sans-serif;
             font-weight: 900;
             letter-spacing: 0.3em;
-            font-size: 1.25rem;
+            font-size: 1.1rem;
             text-transform: uppercase;
         }
 
         /* Cursor Personalizado */
         #custom-cursor {
-            width: 20px;
-            height: 20px;
+            width: 12px;
+            height: 12px;
             background: var(--brand-orange);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            transition: transform 0.15s ease-out, background 0.3s ease;
+            transition: transform 0.1s ease-out;
             mix-blend-mode: difference;
         }
 
         #cursor-follower {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border: 1px solid var(--text-main);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9998;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.2s ease-out;
         }
 
-        /* Animaciones */
+        /* Animaciones de Revelado */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: translateY(30px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal.active {
@@ -79,44 +86,31 @@
 
         .reveal-mask {
             clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
-            transition: clip-path 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: clip-path 1.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal-mask.active {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
         }
 
-        .stagger-1 { transition-delay: 0.1s; }
-        .stagger-2 { transition-delay: 0.2s; }
-
         .btn-horno {
             position: relative;
-            padding: 1.25rem 2.5rem;
+            padding: 1rem 2rem;
             background: var(--text-main);
             color: white;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.5s ease;
             border: 1px solid var(--text-main);
             display: inline-block;
-            overflow: hidden;
             z-index: 1;
         }
 
-        .btn-horno::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: var(--brand-orange);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            z-index: -1;
-        }
-
-        .btn-horno:hover::before {
-            transform: translateX(100%);
+        .btn-horno:hover {
+            background: transparent;
+            color: var(--text-main);
         }
 
         .noise {
@@ -135,20 +129,13 @@
 
         .marquee-animate {
             display: flex;
-            animation: marquee 40s linear infinite;
+            animation: marquee 30s linear infinite;
             width: max-content;
         }
 
-        .separator {
-            height: 1px;
-            background: rgba(0,0,0,0.08);
-            width: 0;
-            transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active .separator { width: 100%; }
-
         .team-img-container {
-            aspect-ratio: 3/4;
+            width: 100%;
+            aspect-ratio: 4/5;
             overflow: hidden;
             background-color: #e5e1dc;
             position: relative;
@@ -156,28 +143,26 @@
 
         .team-img-container img {
             width: 100%;
-            height: 120%;
+            height: 100%;
             object-fit: cover;
             filter: grayscale(100%);
-            transition: filter 0.8s ease;
+            transition: filter 0.6s ease, transform 0.8s ease;
         }
 
         .team-img-container:hover img {
             filter: grayscale(0%);
+            transform: scale(1.03);
         }
 
-        .hover-link {
-            position: relative;
+        /* Mobile Menu Overlay */
+        #mobile-menu-overlay {
+            clip-path: circle(0% at 90% 5%);
+            transition: clip-path 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .hover-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; left: 0;
-            width: 0; height: 1px;
-            background: var(--brand-orange);
-            transition: width 0.3s ease;
+
+        #mobile-menu-overlay.open {
+            clip-path: circle(150% at 90% 5%);
         }
-        .hover-link:hover::after { width: 100%; }
     </style>
 </head>
 <body>
@@ -185,124 +170,159 @@
     <div id="cursor-follower"></div>
     <div class="noise"></div>
 
-    <!-- Navegación -->
-    <nav class="fixed w-full z-50 px-8 md:px-16 py-10 flex justify-between items-center transition-all duration-700" id="main-nav">
-        <div class="logo-type">HORNO<span class="text-orange-600">.</span></div>
-        <div class="hidden md:flex gap-14 text-[9px] font-bold uppercase tracking-[0.3em] text-muted">
-            <a href="#que-es" class="hover-link">¿Qué es?</a>
-            <a href="#metodo" class="hover-link">Método</a>
-            <a href="#hacemos" class="hover-link">Servicios</a>
-            <a href="#quienes" class="hover-link">Nosotros</a>
-            <a href="#contacto" class="hover-link">Contacto</a>
+    <!-- Menú Móvil -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black z-[60] flex flex-col justify-center items-center text-stone-200 md:hidden">
+        <button onclick="toggleMenu()" class="absolute top-10 right-8 text-white text-xs tracking-widest uppercase">Cerrar</button>
+        <div class="flex flex-col gap-8 text-4xl serif italic text-center">
+            <a href="#que-es" onclick="toggleMenu()">¿Qué es?</a>
+            <a href="#metodo" onclick="toggleMenu()">Método</a>
+            <a href="#hacemos" onclick="toggleMenu()">Servicios</a>
+            <a href="#quienes" onclick="toggleMenu()">Nosotros</a>
+            <a href="#contacto" onclick="toggleMenu()">Contacto</a>
         </div>
-        <div class="w-8 h-px bg-current md:hidden"></div>
+    </div>
+
+    <!-- Navegación -->
+    <nav class="fixed w-full z-50 px-6 md:px-16 py-6 md:py-10 flex justify-between items-center transition-all duration-700" id="main-nav">
+        <div class="logo-type">HORNO<span class="text-orange-600">.</span></div>
+        
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex gap-10 lg:gap-14 text-[9px] font-bold uppercase tracking-[0.3em] text-muted">
+            <a href="#que-es" class="hover:text-orange-600 transition">¿Qué es?</a>
+            <a href="#metodo" class="hover:text-orange-600 transition">Método</a>
+            <a href="#hacemos" class="hover:text-orange-600 transition">Servicios</a>
+            <a href="#quienes" class="hover:text-orange-600 transition">Nosotros</a>
+            <a href="#contacto" class="hover:text-orange-600 transition">Contacto</a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button onclick="toggleMenu()" class="md:hidden flex flex-col gap-1.5 items-end">
+            <div class="w-6 h-0.5 bg-current"></div>
+            <div class="w-4 h-0.5 bg-current text-orange-600"></div>
+        </button>
     </nav>
 
     <!-- Hero -->
-    <section class="min-h-screen flex flex-col justify-center px-8 md:px-16 relative overflow-hidden">
-        <div class="relative z-10">
-            <div class="reveal active flex items-center gap-4 mb-8">
-                <div class="w-12 h-px bg-orange-600"></div>
-                <span class="text-[9px] font-bold tracking-[0.5em] uppercase text-orange-600">🔥 H O R N O</span>
+    <section class="min-h-[90vh] md:min-h-screen flex flex-col justify-center px-6 md:px-16 relative overflow-hidden pt-20">
+        <div class="relative z-10 max-w-7xl">
+            <div class="reveal active flex items-center gap-4 mb-6 md:mb-8">
+                <div class="w-8 md:w-12 h-px bg-orange-600"></div>
+                <span class="text-[8px] md:text-[9px] font-bold tracking-[0.5em] uppercase text-orange-600">🔥 H O R N O</span>
             </div>
-            <h1 class="reveal-mask active text-[14vw] md:text-[9vw] leading-[0.85] font-light mb-16">
+            <h1 class="reveal-mask active text-[16vw] md:text-[10vw] lg:text-[9vw] leading-[0.9] font-light mb-10 md:mb-16">
                 Cocinamos <br>
                 <span class="italic font-normal serif">marcas reales.</span>
             </h1>
-            <div class="flex flex-col md:flex-row gap-16 items-start">
-                <p class="reveal active stagger-1 max-w-md text-xl text-muted font-light leading-relaxed">
+            <div class="flex flex-col md:flex-row gap-8 md:gap-16 items-start">
+                <p class="reveal active max-w-sm md:max-w-md text-lg md:text-xl text-muted font-light leading-relaxed">
                     Cocinamos productos y marcas para que volvamos a comer bien. Ideas que se amasan, se hornean y salen listas para crecer.
                 </p>
-                <div class="reveal active stagger-2">
+                <div class="reveal active">
                     <a href="#que-es" class="btn-horno">Entrar al taller</a>
                 </div>
             </div>
         </div>
-        <div class="parallax-bg absolute -right-20 top-1/2 -translate-y-1/2 text-[30vw] font-black text-black/[0.02] select-none pointer-events-none uppercase transition-transform duration-1000">
+        <div class="absolute -right-10 md:-right-20 top-1/2 -translate-y-1/2 text-[40vw] md:text-[30vw] font-black text-black/[0.02] select-none pointer-events-none uppercase">
             REAl
         </div>
     </section>
 
     <!-- Marquee -->
-    <div class="py-16 border-y border-stone-200 bg-white overflow-hidden">
-        <div class="marquee-animate gap-32 items-center">
-            <span class="serif text-5xl font-light italic">Santo Padre</span>
-            <span class="text-5xl font-black tracking-tighter uppercase">REBELDE</span>
-            <span class="serif text-5xl font-light">Bamboo Snacks</span>
-            <span class="text-5xl font-black tracking-tighter uppercase text-orange-600">Cabronas</span>
-            <span class="serif text-5xl font-light italic">Santo Padre</span>
-            <span class="text-5xl font-black tracking-tighter uppercase">REBELDE</span>
-            <span class="serif text-5xl font-light">Bamboo Snacks</span>
-            <span class="text-5xl font-black tracking-tighter uppercase text-orange-600">Cabronas</span>
+    <div class="py-10 md:py-16 border-y border-stone-200 bg-white overflow-hidden">
+        <div class="marquee-animate gap-16 md:gap-32 items-center">
+            <span class="serif text-3xl md:text-5xl font-light italic">Santo Padre</span>
+            <span class="text-3xl md:text-5xl font-black tracking-tighter uppercase">REBELDE</span>
+            <span class="serif text-3xl md:text-5xl font-light">Bamboo Snacks</span>
+            <span class="text-3xl md:text-5xl font-black tracking-tighter uppercase text-orange-600">Cabronas</span>
+            <span class="serif text-3xl md:text-5xl font-light italic">Santo Padre</span>
+            <span class="text-3xl md:text-5xl font-black tracking-tighter uppercase">REBELDE</span>
+            <span class="serif text-3xl md:text-5xl font-light">Bamboo Snacks</span>
+            <span class="text-3xl md:text-5xl font-black tracking-tighter uppercase text-orange-600">Cabronas</span>
         </div>
     </div>
 
-    <!-- Equipo Section (Corregido) -->
-    <section id="quienes" class="py-40 px-8 md:px-16">
+    <!-- ¿Qué es HORNO? -->
+    <section id="que-es" class="py-24 md:py-40 px-6 md:px-16 bg-[#111111] text-stone-200">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 md:gap-24 items-start">
+            <div class="reveal">
+                <h2 class="text-5xl md:text-8xl mb-8 md:mb-12 font-light leading-none italic serif text-orange-600">¿Qué es HORNO?</h2>
+                <div class="space-y-6 md:space-y-8 text-lg md:text-xl font-light text-stone-400">
+                    <p class="text-white text-2xl md:text-3xl leading-tight">No somos una agencia. Tampoco una consultora. Nacimos haciendo.</p>
+                    <p>Somos la cocina donde nacen productos y marcas reales: ideas que se amasan, se prueban y se hornean para salir al mundo.</p>
+                </div>
+            </div>
+            <div class="reveal bg-stone-900 p-8 md:p-12 border border-stone-800">
+                <h3 class="text-2xl md:text-3xl mb-6 md:mb-8 font-light italic serif text-white">Manifiesto</h3>
+                <ul class="space-y-4 md:space-y-6 text-stone-400 italic text-base md:text-lg leading-relaxed">
+                    <li class="flex gap-4"><span>—</span> "No diseñamos un PowerPoint. Lo hacemos en un horno."</li>
+                    <li class="flex gap-4"><span>—</span> "El branding sin producto es ruido."</li>
+                    <li class="flex gap-4"><span>—</span> "El producto sin marca es silencio."</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Equipo Section -->
+    <section id="quienes" class="py-24 md:py-40 px-6 md:px-16">
         <div class="max-w-7xl mx-auto">
-            <div class="reveal mb-24 text-center">
-                <h2 class="reveal-mask text-7xl font-light serif italic">¿Quiénes somos?</h2>
+            <div class="reveal mb-16 md:mb-24 text-center">
+                <h2 class="text-5xl md:text-7xl font-light serif italic">¿Quiénes somos?</h2>
             </div>
 
-            <div class="grid md:grid-cols-2 gap-24">
+            <div class="grid md:grid-cols-2 gap-16 md:gap-24">
                 <!-- Aldo Antonutti -->
                 <div class="reveal">
-                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
-                        <img src="1723066285925.jfif" alt="Aldo Antonutti" class="parallax-img">
+                    <div class="team-img-container mb-8 md:mb-10 shadow-xl md:shadow-2xl">
+                        <img src="1723066285925.jfif" alt="Retrato de Aldo Antonutti">
                     </div>
-                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Aldo Antonutti</h4>
-                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Artesano de Alimentos Reales</p>
-                    <div class="text-muted font-light leading-relaxed space-y-4">
+                    <h4 class="text-3xl md:text-4xl font-bold tracking-tighter mb-2">Aldo Antonutti</h4>
+                    <p class="text-orange-600 text-[10px] md:text-xs font-bold tracking-widest uppercase mb-6 italic">Artesano de Alimentos Reales</p>
+                    <div class="text-muted font-light leading-relaxed text-base md:text-lg space-y-4">
                         <p>Aldo lleva más de 25 años en el mundo orgánico. Fundó el primer tambo orgánico de Argentina en 1993 y creó la primera marca de quesos orgánicos desde Tandil.</p>
-                        <p>Fundador de <strong>Bamboo Snacks</strong> y <strong>REBELDE</strong>, Aldo es quien baja la idea al piso, al proveedor y al sabor que emociona. Es quien transforma las ideas en algo que se puede probar.</p>
+                        <p>Fundador de <span class="font-medium text-black">Bamboo Snacks</span> y <span class="font-medium text-black">REBELDE</span>. Aldo es quien baja la idea al piso, al proveedor y al sabor que emociona.</p>
                     </div>
                 </div>
 
                 <!-- Bata Casaccia -->
-                <div class="reveal stagger-1">
-                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
-                        <img src="descarga.jfif" alt="Bata Casaccia" class="parallax-img">
+                <div class="reveal">
+                    <div class="team-img-container mb-8 md:mb-10 shadow-xl md:shadow-2xl">
+                        <img src="descarga.jfif" alt="Retrato de Bata Casaccia">
                     </div>
-                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Bata Casaccia</h4>
-                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Brand Builder & Storyteller</p>
-                    <div class="text-muted font-light leading-relaxed space-y-4">
-                        <p>Tras 15 años en consumo masivo y liderar proyectos para <strong>Cerveza Patagonia, Franui y Oreo</strong>, Bata se especializó en construir marcas que hacen bien.</p>
-                        <p>Es el estratega que pone un propósito por delante y escribe las historias que las marcas cuentan. Socio de Aldo en la misión de reescribir recetas auténticas para la góndola.</p>
+                    <h4 class="text-3xl md:text-4xl font-bold tracking-tighter mb-2">Bata Casaccia</h4>
+                    <p class="text-orange-600 text-[10px] md:text-xs font-bold tracking-widest uppercase mb-6 italic">Brand Builder & Storyteller</p>
+                    <div class="text-muted font-light leading-relaxed text-base md:text-lg space-y-4">
+                        <p>Tras 15 años en consumo masivo y liderar proyectos para marcas globales como <span class="font-medium text-black">Cerveza Patagonia y Oreo</span>, se especializó en construir marcas que hacen bien.</p>
+                        <p>Es el estratega que pone un propósito por delante y escribe las historias que las marcas cuentan para reescribir recetas auténticas.</p>
                     </div>
                 </div>
-            </div>
-
-            <div class="reveal mt-32 p-12 bg-white border border-stone-200">
-                <p class="text-2xl font-light italic serif text-center max-w-4xl mx-auto">
-                    "Juntos decidieron instalar este HORNO. La consecuencia natural de este camino."
-                </p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer id="contacto" class="py-40 px-8 md:px-16 text-center bg-white overflow-hidden relative">
+    <footer id="contacto" class="py-24 md:py-40 px-6 md:px-16 text-center bg-white overflow-hidden relative">
         <div class="reveal max-w-5xl mx-auto relative z-10">
-            <h2 class="reveal-mask text-7xl md:text-[10vw] mb-16 leading-none font-bold tracking-tighter uppercase">
+            <h2 class="text-6xl md:text-[10vw] mb-12 md:mb-16 leading-none font-bold tracking-tighter uppercase">
                 VOLVAMOS A <br><span class="italic serif font-light text-orange-600">COMER BIEN.</span>
             </h2>
-            <div class="flex flex-col md:flex-row justify-center items-center gap-12 mb-32">
-                <a href="mailto:hola@horno.com" class="text-3xl md:text-5xl font-light border-b border-black pb-4 hover:text-orange-600 hover:border-orange-600 transition-all duration-500">
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12 mb-20 md:mb-32">
+                <a href="mailto:hola@horno.com" class="text-2xl md:text-5xl font-light border-b border-black pb-2 md:pb-4 hover:text-orange-600 transition-colors">
                     hola@horno.com
                 </a>
             </div>
             
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8 pt-16 border-t border-stone-100">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 pt-10 border-t border-stone-100">
                 <div class="logo-type text-stone-900">HORNO</div>
                 <div class="text-[9px] text-stone-400 font-bold tracking-widest uppercase italic">© 2026 / Tandil / AR</div>
             </div>
         </div>
-        <div class="parallax-bg absolute bottom-[-10%] left-1/2 -translate-x-1/2 text-[40vw] font-black text-stone-100/40 -z-0 select-none uppercase transition-transform duration-700">
+        <div class="absolute bottom-[-5%] left-1/2 -translate-x-1/2 text-[50vw] md:text-[40vw] font-black text-stone-100/60 -z-0 select-none uppercase">
             HORNO
         </div>
     </footer>
 
     <script>
+        // Cursor Logic
         const cursor = document.getElementById('custom-cursor');
         const follower = document.getElementById('cursor-follower');
         
@@ -310,58 +330,40 @@
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
             setTimeout(() => {
-                follower.style.left = e.clientX - 10 + 'px';
-                follower.style.top = e.clientY - 10 + 'px';
+                follower.style.left = e.clientX - 11 + 'px';
+                follower.style.top = e.clientY - 11 + 'px';
             }, 50);
         });
 
-        document.querySelectorAll('a, button, .team-img-container').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'scale(3)';
-                cursor.style.background = 'white';
-                follower.style.transform = 'scale(0)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'scale(1)';
-                cursor.style.background = 'var(--brand-orange)';
-                follower.style.transform = 'scale(1)';
-            });
-        });
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            document.getElementById('mobile-menu-overlay').classList.toggle('open');
+        }
 
+        // Scroll Reveal
         const reveal = () => {
             const reveals = document.querySelectorAll(".reveal, .reveal-mask");
             reveals.forEach(el => {
                 const windowHeight = window.innerHeight;
                 const elementTop = el.getBoundingClientRect().top;
-                if (elementTop < windowHeight - 100) {
+                if (elementTop < windowHeight - 50) {
                     el.classList.add("active");
                 }
-            });
-
-            const scrollPos = window.pageYOffset;
-            document.querySelectorAll('.parallax-img').forEach(img => {
-                const speed = 0.05;
-                const offset = (scrollPos - img.parentElement.offsetTop) * speed;
-                img.style.transform = `translateY(${offset}px)`;
-            });
-            
-            document.querySelectorAll('.parallax-bg').forEach(bg => {
-                const speed = 0.1;
-                bg.style.transform = `translate(-50%, ${scrollPos * speed}px)`;
             });
         };
 
         window.addEventListener("scroll", reveal);
         window.onload = reveal;
 
+        // Navbar Scroll
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
-            if (window.scrollY > 100) {
-                nav.classList.add('bg-white/80', 'backdrop-blur-md', 'py-6', 'shadow-sm');
-                nav.classList.remove('py-10');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/90', 'backdrop-blur-sm', 'py-4', 'shadow-sm');
+                nav.classList.remove('py-6', 'md:py-10');
             } else {
-                nav.classList.remove('bg-white/80', 'backdrop-blur-md', 'py-6', 'shadow-sm');
-                nav.classList.add('py-10');
+                nav.classList.remove('bg-white/90', 'backdrop-blur-sm', 'py-4', 'shadow-sm');
+                nav.classList.add('py-6', 'md:py-10');
             }
         });
     </script>
