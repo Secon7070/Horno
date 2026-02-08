@@ -17,7 +17,7 @@
         }
 
         * {
-            cursor: none !important; /* Escondemos el cursor nativo para el personalizado */
+            cursor: none !important;
         }
 
         body {
@@ -65,7 +65,7 @@
             transition: transform 0.3s ease-out;
         }
 
-        /* Animaciones de Revelado */
+        /* Animaciones */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -102,6 +102,7 @@
             border: 1px solid var(--text-main);
             display: inline-block;
             overflow: hidden;
+            z-index: 1;
         }
 
         .btn-horno::before {
@@ -155,18 +156,16 @@
 
         .team-img-container img {
             width: 100%;
-            height: 110%; /* Extra height for parallax */
+            height: 120%;
             object-fit: cover;
             filter: grayscale(100%);
             transition: filter 0.8s ease;
-            transform: translateY(0);
         }
 
         .team-img-container:hover img {
             filter: grayscale(0%);
         }
 
-        /* Hover links */
         .hover-link {
             position: relative;
         }
@@ -238,75 +237,7 @@
         </div>
     </div>
 
-    <!-- ¿Qué es HORNO? -->
-    <section id="que-es" class="py-40 px-8 md:px-16 bg-[#111111] text-stone-200">
-        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-24 items-start">
-            <div class="reveal">
-                <h2 class="reveal-mask text-6xl md:text-8xl mb-12 font-light leading-none italic serif text-orange-600">¿Qué es HORNO?</h2>
-                <div class="space-y-8 text-xl font-light text-stone-400">
-                    <p class="text-white text-3xl leading-tight">No somos una agencia. Tampoco una consultora. Nacimos haciendo.</p>
-                    <p>Somos la cocina donde nacen productos y marcas reales: ideas que se amasan, se prueban, se ajustan, se hornean y salen al mundo listas para crecer.</p>
-                </div>
-            </div>
-            <div class="reveal stagger-1 bg-stone-900 p-12 border border-stone-800 transform hover:scale-[1.02] transition-transform duration-500">
-                <h3 class="text-3xl mb-8 font-light italic serif text-white">Nuestro Manifiesto</h3>
-                <ul class="space-y-6 text-stone-400 italic text-lg leading-relaxed">
-                    <li class="hover:text-white transition-colors">"No diseñamos un PowerPoint. Lo hacemos en un horno."</li>
-                    <li class="hover:text-white transition-colors">"El branding sin producto es ruido."</li>
-                    <li class="hover:text-white transition-colors">"El producto sin marca es silencio."</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Metodología -->
-    <section id="metodo" class="py-40 px-8 md:px-16">
-        <div class="max-w-7xl mx-auto">
-            <div class="reveal mb-24">
-                <h2 class="text-xs font-bold tracking-[0.6em] uppercase text-orange-600 mb-6">Cómo lo hacemos</h2>
-                <h3 class="reveal-mask text-6xl font-light italic serif">Nuestro método.</h3>
-            </div>
-            <div class="grid md:grid-cols-3 gap-16">
-                <div class="reveal border-l border-stone-200 pl-8 py-4">
-                    <p class="text-2xl font-light">Venimos de hacer: cada proyecto propio es un laboratorio vivo.</p>
-                </div>
-                <div class="reveal stagger-1 border-l border-stone-200 pl-8 py-4">
-                    <p class="text-2xl font-light">Pensamos como creativos y ejecutamos como operadores.</p>
-                </div>
-                <div class="reveal stagger-2 border-l border-stone-200 pl-8 py-4">
-                    <p class="text-2xl font-light">Partimos de ingredientes, no de briefs. Pensamos en negocios.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Servicios -->
-    <section id="hacemos" class="py-40 px-8 md:px-16 bg-stone-100">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-2 gap-24">
-                <div class="reveal">
-                    <div class="separator mb-10"></div>
-                    <h4 class="text-orange-600 text-xs font-bold uppercase tracking-widest mb-10">Creamos Productos</h4>
-                    <ul class="space-y-4 text-2xl font-light list-none">
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Desarrollo desde cero</li>
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Formulación real</li>
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Ajuste de costos</li>
-                    </ul>
-                </div>
-                <div class="reveal stagger-1">
-                    <div class="separator mb-10"></div>
-                    <h4 class="text-orange-600 text-xs font-bold uppercase tracking-widest mb-10">Creamos Marcas</h4>
-                    <ul class="space-y-4 text-2xl font-light list-none">
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Naming y storytelling</li>
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Identidad y packaging</li>
-                        <li class="hover:translate-x-4 transition-transform duration-300">— Narrativa comercial</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Equipo -->
+    <!-- Equipo Section (Corregido) -->
     <section id="quienes" class="py-40 px-8 md:px-16">
         <div class="max-w-7xl mx-auto">
             <div class="reveal mb-24 text-center">
@@ -314,25 +245,37 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-24">
-                <!-- Bata Casaccia (Imagen Intercambiada) -->
+                <!-- Aldo Antonutti -->
                 <div class="reveal">
                     <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
-                        <img src="1723066285925.jfif" alt="Bata Casaccia" class="parallax-img">
-                    </div>
-                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Bata Casaccia</h4>
-                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Brand Builder</p>
-                    <p class="text-muted font-light leading-relaxed">Experto en storytelling y arquitectura de marcas con propósito. Bata le da forma estratégica a los proyectos y escribe las historias que las marcas cuentan.</p>
-                </div>
-
-                <!-- Aldo Antonutti (Imagen Intercambiada) -->
-                <div class="reveal stagger-1">
-                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
-                        <img src="descarga.jfif" alt="Aldo Antonutti" class="parallax-img">
+                        <img src="1723066285925.jfif" alt="Aldo Antonutti" class="parallax-img">
                     </div>
                     <h4 class="text-4xl font-bold tracking-tighter mb-2">Aldo Antonutti</h4>
-                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Artesano de Alimentos</p>
-                    <p class="text-muted font-light leading-relaxed">Lleva más de 25 años en el mundo orgánico. El artesano que baja la idea al piso, al lote piloto y al número que cierra.</p>
+                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Artesano de Alimentos Reales</p>
+                    <div class="text-muted font-light leading-relaxed space-y-4">
+                        <p>Aldo lleva más de 25 años en el mundo orgánico. Fundó el primer tambo orgánico de Argentina en 1993 y creó la primera marca de quesos orgánicos desde Tandil.</p>
+                        <p>Fundador de <strong>Bamboo Snacks</strong> y <strong>REBELDE</strong>, Aldo es quien baja la idea al piso, al proveedor y al sabor que emociona. Es quien transforma las ideas en algo que se puede probar.</p>
+                    </div>
                 </div>
+
+                <!-- Bata Casaccia -->
+                <div class="reveal stagger-1">
+                    <div class="team-img-container mb-10 shadow-2xl overflow-hidden">
+                        <img src="descarga.jfif" alt="Bata Casaccia" class="parallax-img">
+                    </div>
+                    <h4 class="text-4xl font-bold tracking-tighter mb-2">Bata Casaccia</h4>
+                    <p class="text-orange-600 text-xs font-bold tracking-widest uppercase mb-8 italic">Brand Builder & Storyteller</p>
+                    <div class="text-muted font-light leading-relaxed space-y-4">
+                        <p>Tras 15 años en consumo masivo y liderar proyectos para <strong>Cerveza Patagonia, Franui y Oreo</strong>, Bata se especializó en construir marcas que hacen bien.</p>
+                        <p>Es el estratega que pone un propósito por delante y escribe las historias que las marcas cuentan. Socio de Aldo en la misión de reescribir recetas auténticas para la góndola.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="reveal mt-32 p-12 bg-white border border-stone-200">
+                <p class="text-2xl font-light italic serif text-center max-w-4xl mx-auto">
+                    "Juntos decidieron instalar este HORNO. La consecuencia natural de este camino."
+                </p>
             </div>
         </div>
     </section>
@@ -360,22 +303,18 @@
     </footer>
 
     <script>
-        // Cursor Personalizado
         const cursor = document.getElementById('custom-cursor');
         const follower = document.getElementById('cursor-follower');
         
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
-            // Suavizado del seguidor
             setTimeout(() => {
                 follower.style.left = e.clientX - 10 + 'px';
                 follower.style.top = e.clientY - 10 + 'px';
             }, 50);
         });
 
-        // Hover en elementos interactivos para el cursor
         document.querySelectorAll('a, button, .team-img-container').forEach(el => {
             el.addEventListener('mouseenter', () => {
                 cursor.style.transform = 'scale(3)';
@@ -389,7 +328,6 @@
             });
         });
 
-        // Animación de aparición al scroll
         const reveal = () => {
             const reveals = document.querySelectorAll(".reveal, .reveal-mask");
             reveals.forEach(el => {
@@ -400,11 +338,11 @@
                 }
             });
 
-            // Parallax Simple
             const scrollPos = window.pageYOffset;
             document.querySelectorAll('.parallax-img').forEach(img => {
-                const speed = 0.2;
-                img.style.transform = `translateY(${scrollPos * speed % 50}px)`;
+                const speed = 0.05;
+                const offset = (scrollPos - img.parentElement.offsetTop) * speed;
+                img.style.transform = `translateY(${offset}px)`;
             });
             
             document.querySelectorAll('.parallax-bg').forEach(bg => {
@@ -416,7 +354,6 @@
         window.addEventListener("scroll", reveal);
         window.onload = reveal;
 
-        // Estilo Navbar
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('main-nav');
             if (window.scrollY > 100) {
